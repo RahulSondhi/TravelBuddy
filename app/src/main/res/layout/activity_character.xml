@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="TravelBuddy"
+            android:text="@string/travelbuddy"
             android:textAlignment="center"
             android:textColor="@android:color/background_light"
             android:textColorLink="@android:color/background_light"
@@ -36,16 +36,12 @@
     <android.support.v4.view.ViewPager
         android:id="@+id/container"
         android:layout_width="681dp"
-        android:layout_height="match_parent"
+        android:layout_height="514dp"
         android:background="@color/LookAtMe"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:layout_editor_absoluteX="0dp">
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="54dp">
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@mipmap/avatar_round" />
     </android.support.v4.view.ViewPager>
 
     <android.support.design.widget.FloatingActionButton
@@ -56,5 +52,12 @@
         android:layout_margin="@dimen/fab_margin"
         app:backgroundTint="@color/FightME"
         app:srcCompat="@android:drawable/ic_menu_view" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipChildren="false">
+
+    </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>
