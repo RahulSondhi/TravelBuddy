@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="graphicOverlay" type="id">test</item>
+    <item name="preview" type="id">test</item>
+    <item name="topLayout" type="id">test</item>
+</resources>

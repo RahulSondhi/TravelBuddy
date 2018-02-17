@@ -53,8 +53,9 @@ public class Character extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "In progress", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+//                Snackbar.make(view, "In progress", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+                setContentView(R.layout.activity_qr);
             }
         });
 
@@ -141,4 +142,6 @@ public class Character extends AppCompatActivity {
             return 3;
         }
     }
+
+
 }

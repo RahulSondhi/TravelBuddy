@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.android.gms.samples.vision.barcodereader;
+package hooligan.QRScanner;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -51,6 +51,8 @@ import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import java.io.IOException;
+
+import hooligan.travelbuddy.R;
 
 /**
  * Activity for the multi-tracker app.  This app detects barcodes and displays the value with the

@@ -33,7 +33,7 @@ import hooligan.travelbuddy.R;
  * Main activity demonstrating how to pass extra parameters to an activity that
  * reads barcodes.
  */
-public class MainActivity extends Activity implements View.OnClickListener {
+public class QRActivity extends Activity implements View.OnClickListener {
 
     // use a compound button so either checkbox or switch widgets work.
     private CompoundButton autoFocus;
@@ -72,6 +72,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             intent.putExtra(BarcodeCaptureActivity.UseFlash, useFlash.isChecked());
 
             startActivityForResult(intent, RC_BARCODE_CAPTURE);
+            //startActivity
         }
 
     }
