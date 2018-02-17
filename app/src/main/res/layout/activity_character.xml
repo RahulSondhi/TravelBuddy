@@ -45,7 +45,7 @@
             android:id="@+id/imageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@mipmap/Avatar_round" />
+            app:srcCompat="@mipmap/avatar_round" />
     </android.support.v4.view.ViewPager>
 
     <android.support.design.widget.FloatingActionButton
