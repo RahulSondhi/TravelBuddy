@@ -2,6 +2,7 @@ package hooligan.travelbuddy;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -87,6 +88,11 @@ public class Character extends AppCompatActivity implements SensorEventListener 
         }else{
             levelmeupCheck = 100;
         }
+
+        SharedPreferences settings = getApplicationContext().getSharedPreferences("Score", 0);
+        level = settings.getInt("homeScore", 0);
+        levelCount.setText(String.valueOf(level));
+        setLevel();
 
         starve();
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -177,7 +183,7 @@ public class Character extends AppCompatActivity implements SensorEventListener 
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 2;
+            return 1;
         }
     }
 
@@ -211,7 +217,8 @@ public class Character extends AppCompatActivity implements SensorEventListener 
             float tempSteps = sensorEvent.values[0] - initStep;
             if(tempSteps >= levelmeupCheck){
 
-                levelUp(sensorEvent);
+                levelUp();
+                initStep = sensorEvent.values[0];
 
             }else {
                 stepCount.setText(String.valueOf((int)(sensorEvent.values[0] - initStep))+" / "+String.valueOf(levelmeupCheck));
@@ -220,7 +227,7 @@ public class Character extends AppCompatActivity implements SensorEventListener 
         starve();
     }
 
-    public void levelUp(SensorEvent sensorEvent){
+    public void levelUp(){
         int level = Integer.parseInt(levelCount.getText().toString()) + 1;
         int tempPower = 100;
         int tempStamina = 100;
@@ -256,7 +263,7 @@ public class Character extends AppCompatActivity implements SensorEventListener 
             }
         }
 
-        initStep = sensorEvent.values[0];
+
 
         levelCount.setText(String.valueOf(level));
         strengthCount.setText(String.valueOf(tempPower));
@@ -265,12 +272,20 @@ public class Character extends AppCompatActivity implements SensorEventListener 
         String tempText = "0 / "+String.valueOf(levelmeup);
         stepCount.setText(tempText);
         levelmeupCheck = levelmeup;
+
+        SharedPreferences settings = getApplicationContext().getSharedPreferences("Score", 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putInt("homeScore", level);
+
+    // Apply the edits!
+        editor.apply();
     }
 
     public void starve(){
         int timeDiff;
         int timeCurr = new Time(System.currentTimeMillis()).getMinutes();
         int hunger = Integer.parseInt(hungerCount.getText().toString());
+        int health = Integer.parseInt(healthCount.getText().toString());
 
         if(debug){
             timeDiff = 1;
@@ -280,8 +295,95 @@ public class Character extends AppCompatActivity implements SensorEventListener 
 
         if((timeCurr - time) > timeDiff){
             time = timeCurr;
-            hunger--;
-            hungerCount.setText(String.valueOf(hunger));
+            if(hunger != 0){
+                hunger--;
+                hungerCount.setText(String.valueOf(hunger));
+            }else{
+                health = health - 5;
+                healthCount.setText(String.valueOf(health));
+            }
+        }
+
+        if(health == 0){
+            death();
+        }
+    }
+
+    public void death(){
+        starting = true;
+        level = 0;
+        levelCount.setText(String.valueOf(level));
+        int time = new Time(System.currentTimeMillis()).getMinutes();
+
+        stepCount.setText("0");
+        healthCount.setText("100");
+        hungerCount.setText("100");
+        strengthCount.setText("100");
+        staminaCount.setText("100");
+        setLevel();
+    }
+
+    public void setLevel(){
+        if(level == 0){
+            level = 0;
+            levelCount.setText(String.valueOf(level));
+            stepCount.setText("0");
+            healthCount.setText("100");
+            hungerCount.setText("100");
+            strengthCount.setText("100");
+            staminaCount.setText("100");
+        }else{
+            int level = Integer.parseInt(levelCount.getText().toString());
+            int tempPower = 100;
+            int tempStamina = 100;
+            int tempHealth = 100;
+            int levelmeup;
+
+            if(debug){
+                levelmeup = 10;
+            }else{
+                levelmeup = 100;
+            }
+
+            double powerup = 5;
+            int staminaup = 10;
+            int healthup = 15;
+            double levelFactor = 1.20;
+            double powerFactor = 1.05;
+            double staminaFactor = 1.20;
+
+            for(int i = 0; i < level;i++){
+                levelmeup = (int)(levelmeup * levelFactor);
+                tempPower = (int)(tempPower + powerup);
+                powerup = powerup * powerFactor;
+
+                if((i % 5 == 0) && (i != 0)){
+                    tempStamina = tempStamina + staminaup;
+                    staminaup = (int)(staminaup * staminaFactor);
+                }
+
+                if((i % 10 == 0) && (i != 0)){
+                    tempHealth = tempHealth + healthup;
+                    healthup = (int)(healthup * staminaFactor);
+                }
+            }
+
+
+
+            levelCount.setText(String.valueOf(level));
+            strengthCount.setText(String.valueOf(tempPower));
+            healthCount.setText(String.valueOf(tempHealth));
+            staminaCount.setText(String.valueOf(tempStamina));
+            String tempText = "0 / "+String.valueOf(levelmeup);
+            stepCount.setText(tempText);
+            levelmeupCheck = levelmeup;
+
+            SharedPreferences settings = getApplicationContext().getSharedPreferences("Score", 0);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putInt("homeScore", level);
+
+            // Apply the edits!
+            editor.apply();
         }
     }
 
