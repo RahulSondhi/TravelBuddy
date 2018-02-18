@@ -10,7 +10,7 @@
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="581dp"
-        android:layout_height="814dp"
+        android:layout_height="517dp"
         android:contentDescription="ME"
         android:src="@mipmap/avatar"
         app:layout_constraintEnd_toEndOf="parent"

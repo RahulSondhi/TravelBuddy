@@ -217,6 +217,7 @@ public class Character extends AppCompatActivity implements SensorEventListener 
                 stepCount.setText(String.valueOf((int)(sensorEvent.values[0] - initStep))+" / "+String.valueOf(levelmeupCheck));
             }
         }
+        starve();
     }
 
     public void levelUp(SensorEvent sensorEvent){
@@ -266,7 +267,7 @@ public class Character extends AppCompatActivity implements SensorEventListener 
         levelmeupCheck = levelmeup;
     }
 
-    public void starve() throws InterruptedException {
+    public void starve(){
         int timeDiff;
         int timeCurr = new Time(System.currentTimeMillis()).getMinutes();
         int hunger = Integer.parseInt(hungerCount.getText().toString());
@@ -282,9 +283,6 @@ public class Character extends AppCompatActivity implements SensorEventListener 
             hunger--;
             hungerCount.setText(String.valueOf(hunger));
         }
-
-        Thread.sleep(1000*60);
-        starve();
     }
 
     @Override
