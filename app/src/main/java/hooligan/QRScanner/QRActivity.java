@@ -16,9 +16,9 @@
 
 package hooligan.QRScanner;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.app.Activity;
 import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -26,6 +26,19 @@ import android.widget.TextView;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
+import java.net.URLEncoder;
 
 import hooligan.travelbuddy.R;
 
@@ -54,6 +67,9 @@ public class QRActivity extends Activity implements View.OnClickListener {
 
         autoFocus = (CompoundButton) findViewById(R.id.auto_focus);
         useFlash = (CompoundButton) findViewById(R.id.use_flash);
+
+
+
 
         findViewById(R.id.read_barcode).setOnClickListener(this);
     }
@@ -107,6 +123,51 @@ public class QRActivity extends Activity implements View.OnClickListener {
                     Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
                     statusMessage.setText(R.string.barcode_success);
                     barcodeValue.setText(barcode.displayValue);
+
+
+
+                    String message = null;
+                    try {
+                        message = URLEncoder.encode("my message", "UTF-8");
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                    BufferedReader reader = null;
+
+                    try {
+                        URL url = new URL("https://api.nutritionix.com/v1_1/item?upc=" + barcode.displayValue + "&appId=d31db2ad&appKey=9bc800d3836d09dabaf4874dffa7b8ab");
+
+                        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                        // set connection output to true
+                        connection.setDoOutput(true);
+                        // instead of a GET, we're going to send using method="POST"
+                        connection.setRequestMethod("POST");
+
+                        reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                        final String json = reader.readLine();
+//                        OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
+//                        writer.write("message=" + message);
+                        final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+                        reader.close();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                JsonObject response = gson.fromJson(json, JsonObject.class);
+                                //responseText.setText(gson.toJson(response));
+                                System.out.println(gson.toJson(response));
+                            }
+                        });
+                    } catch (ProtocolException e) {
+                        e.printStackTrace();
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+
+
                     Log.d(TAG, "Barcode read: " + barcode.displayValue);
                 } else {
                     statusMessage.setText(R.string.barcode_failure);
