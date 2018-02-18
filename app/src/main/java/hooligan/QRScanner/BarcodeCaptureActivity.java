@@ -42,10 +42,10 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.CommonStatusCodes;
-import com.google.android.gms.samples.vision.barcodereader.ui.camera.CameraSource;
-import com.google.android.gms.samples.vision.barcodereader.ui.camera.CameraSourcePreview;
+import hooligan.QRScanner.ui.camera.CameraSource;
+import hooligan.QRScanner.ui.camera.CameraSourcePreview;
 
-import com.google.android.gms.samples.vision.barcodereader.ui.camera.GraphicOverlay;
+import hooligan.QRScanner.ui.camera.GraphicOverlay;
 import com.google.android.gms.vision.MultiProcessor;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
@@ -90,7 +90,7 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements B
         setContentView(R.layout.barcode_capture);
 
         mPreview = (CameraSourcePreview) findViewById(R.id.preview);
-        mGraphicOverlay = (GraphicOverlay<BarcodeGraphic>) findViewById(R.id.graphicOverlay);
+        mGraphicOverlay = findViewById(R.id.graphicOverlay);
 
         // read parameters from the intent used to launch the activity.
         boolean autoFocus = getIntent().getBooleanExtra(AutoFocus, false);
