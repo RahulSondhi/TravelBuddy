@@ -135,9 +135,9 @@ public class QRActivity extends Activity implements View.OnClickListener {
                         e.printStackTrace();
                     }
 
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
+                    ///new Thread(new Runnable() {
+                       // @Override
+                        //public void run() {
                             BufferedReader reader = null;
                             try {
                                 URL url = new URL("https://api.nutritionix.com/v1_1/item?upc=" + barcode.displayValue + "&appId=d31db2ad&appKey=9bc800d3836d09dabaf4874dffa7b8ab");
@@ -148,19 +148,19 @@ public class QRActivity extends Activity implements View.OnClickListener {
                                 // instead of a GET, we're going to send using method="POST"
                                 connection.setRequestMethod("POST");
 
-                                reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                                final String json = reader.readLine();
-                                final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                                //reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                                //final String json = reader.readLine();
+                                //final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-                                reader.close();
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        JsonObject response = gson.fromJson(json, JsonObject.class);
+                                //reader.close();
+                                //runOnUiThread(new Runnable() {
+                                 //   @Override
+                                //    public void run() {
+                                        //JsonObject response = gson.fromJson(json, JsonObject.class);
                                         //responseText.setText(gson.toJson(response));
-                                        System.out.println(gson.toJson(response));
-                                    }
-                                });
+                                        //System.out.println(gson.toJson(response));
+                                  //  }
+                               // });
                             } catch (ProtocolException e) {
                                 e.printStackTrace();
                             } catch (MalformedURLException e) {
@@ -168,49 +168,8 @@ public class QRActivity extends Activity implements View.OnClickListener {
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
-                        }
-                    }).start();
 
 
-                    /*
-                    new Thread(new Runnable() {
-            @Override
-            public void run() {
-                BufferedReader reader = null;
-                try {
-                    String signedFoodSearchUrl = FatSecretUtils.sign("http://platform.fatsecret.com/rest/server.api?method=foods.search&format=json&search_expression=bananas");
-
-                    Log.d(TAG, "Signed foods.search URL = " + signedFoodSearchUrl);
-
-                    HttpURLConnection foodSearchConnection = (HttpURLConnection) new URL(signedFoodSearchUrl).openConnection();
-                    reader = new BufferedReader(new InputStreamReader(foodSearchConnection.getInputStream()));
-                    final String json = reader.readLine();
-
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            JsonObject response = gson.fromJson(json, JsonObject.class);
-                            responseText.setText(gson.toJson(response));
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (OAuthExpectationFailedException e) {
-                    e.printStackTrace();
-                } catch (OAuthCommunicationException e) {
-                    e.printStackTrace();
-                } catch (OAuthMessageSignerException e) {
-                    e.printStackTrace();
-                } finally {
-                    try {
-                        reader.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }).start();
-                     */
 
 
                     Log.d(TAG, "Barcode read: " + barcode.displayValue);
