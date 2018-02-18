@@ -57,6 +57,8 @@ public class QRActivity extends Activity implements View.OnClickListener {
     private static final int RC_BARCODE_CAPTURE = 9001;
     private static final String TAG = "BarcodeMain";
 
+    private static Barcode barcode;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,7 +122,7 @@ public class QRActivity extends Activity implements View.OnClickListener {
         if (requestCode == RC_BARCODE_CAPTURE) {
             if (resultCode == CommonStatusCodes.SUCCESS) {
                 if (data != null) {
-                    Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
+                    barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
                     statusMessage.setText(R.string.barcode_success);
                     barcodeValue.setText(barcode.displayValue);
 
@@ -132,40 +134,83 @@ public class QRActivity extends Activity implements View.OnClickListener {
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
-                    BufferedReader reader = null;
 
-                    try {
-                        URL url = new URL("https://api.nutritionix.com/v1_1/item?upc=" + barcode.displayValue + "&appId=d31db2ad&appKey=9bc800d3836d09dabaf4874dffa7b8ab");
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            BufferedReader reader = null;
+                            try {
+                                URL url = new URL("https://api.nutritionix.com/v1_1/item?upc=" + barcode.displayValue + "&appId=d31db2ad&appKey=9bc800d3836d09dabaf4874dffa7b8ab");
 
-                        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                        // set connection output to true
-                        connection.setDoOutput(true);
-                        // instead of a GET, we're going to send using method="POST"
-                        connection.setRequestMethod("POST");
+                                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                                // set connection output to true
+                                connection.setDoOutput(true);
+                                // instead of a GET, we're going to send using method="POST"
+                                connection.setRequestMethod("POST");
 
-                        reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                        final String json = reader.readLine();
-//                        OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
-//                        writer.write("message=" + message);
-                        final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                                reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                                final String json = reader.readLine();
+                                final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-                        reader.close();
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                JsonObject response = gson.fromJson(json, JsonObject.class);
-                                //responseText.setText(gson.toJson(response));
-                                System.out.println(gson.toJson(response));
+                                reader.close();
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        JsonObject response = gson.fromJson(json, JsonObject.class);
+                                        //responseText.setText(gson.toJson(response));
+                                        System.out.println(gson.toJson(response));
+                                    }
+                                });
+                            } catch (ProtocolException e) {
+                                e.printStackTrace();
+                            } catch (MalformedURLException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
                             }
-                        });
-                    } catch (ProtocolException e) {
-                        e.printStackTrace();
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
+                        }
+                    }).start();
+
+
+                    /*
+                    new Thread(new Runnable() {
+            @Override
+            public void run() {
+                BufferedReader reader = null;
+                try {
+                    String signedFoodSearchUrl = FatSecretUtils.sign("http://platform.fatsecret.com/rest/server.api?method=foods.search&format=json&search_expression=bananas");
+
+                    Log.d(TAG, "Signed foods.search URL = " + signedFoodSearchUrl);
+
+                    HttpURLConnection foodSearchConnection = (HttpURLConnection) new URL(signedFoodSearchUrl).openConnection();
+                    reader = new BufferedReader(new InputStreamReader(foodSearchConnection.getInputStream()));
+                    final String json = reader.readLine();
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            JsonObject response = gson.fromJson(json, JsonObject.class);
+                            responseText.setText(gson.toJson(response));
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (OAuthExpectationFailedException e) {
+                    e.printStackTrace();
+                } catch (OAuthCommunicationException e) {
+                    e.printStackTrace();
+                } catch (OAuthMessageSignerException e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        reader.close();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-
+                }
+            }
+        }).start();
+                     */
 
 
                     Log.d(TAG, "Barcode read: " + barcode.displayValue);
