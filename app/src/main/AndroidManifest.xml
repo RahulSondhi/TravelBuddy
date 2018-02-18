@@ -50,7 +50,7 @@
         </activity>
 
         <activity
-            android:name="hooligan$Pedometer$Activity"
+            android:name="hooligan.Pedometer.Activity"
             android:label="pedometerActivity"
             android:theme="@style/AppTheme.NoActionBar">
 
