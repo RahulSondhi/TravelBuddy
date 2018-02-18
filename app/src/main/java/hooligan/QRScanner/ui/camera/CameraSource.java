@@ -1190,6 +1190,8 @@ public class CameraSource {
                             .setRotation(mRotation)
                             .build();
 
+
+
                     // Hold onto the frame data locally, so that we can use this for detection
                     // below.  We need to clear mPendingFrameData to ensure that this buffer isn't
                     // recycled back to the camera before we are done using that data.
