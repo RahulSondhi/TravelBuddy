@@ -1,4 +1,4 @@
-package com.example.manny.myapplication;
+package hooligan.Pedometer;
 
 import android.content.Context;
 import android.hardware.Sensor;
@@ -10,7 +10,9 @@ import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity implements SensorEventListener {
+import hooligan.travelbuddy.R;
+
+class Pedometer extends AppCompatActivity implements SensorEventListener {
 
     SensorManager sensorManager;
 
@@ -21,7 +23,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_pedometer);
 
         stepCount = (TextView) findViewById(R.id.stepCount);
 
