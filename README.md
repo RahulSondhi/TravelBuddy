@@ -26,5 +26,3 @@
 * Getting Actual Avatar Assets
 * Accounting for sleep patterns
 * Player can find loot/bonuses from walking around their area
-
-### As of now, We both would love to follow through with finishing the project we started and hopefully release on app store. Thank you for taking interest in our program
